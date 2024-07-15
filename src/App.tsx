@@ -1,26 +1,37 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { FC, useState } from "react";
+import AddPizzaForm from "./ components/AddPizzaForm";
+import Pizza from "./models/Pizza";
+import DisplayPizzas from "./ components/DisplayPizza";
+import "./App.css";
 
-function App() {
+const App: FC = () => {
+  const [pizzaList, setPizzaList] = useState<Pizza[]>([]);
+  console.log(pizzaList);
+  const addPizza = (newPizza: Pizza) => {
+    setPizzaList([...pizzaList, newPizza]);
+  };
+  const updatePizza = (newPizza: Pizza) => {
+    setPizzaList(
+      pizzaList.map((pizza) => (pizza.id === newPizza.id ? newPizza : pizza))
+    );
+  };
+  const deletePizza = (id: number) => {
+    const newPizzaList = pizzaList.filter((pizza) => pizza.id !== id);
+    setPizzaList(newPizzaList);
+  };
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="wrap">
+        <span className="heading">My Pizza</span>
+        <AddPizzaForm addPizza={addPizza} />
+        <DisplayPizzas
+          pizzasList={pizzaList}
+          updatePizza={updatePizza}
+          deletePizza={deletePizza}
+        ></DisplayPizzas>
+      </div>
     </div>
   );
-}
+};
 
 export default App;
